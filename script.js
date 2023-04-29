@@ -18,16 +18,23 @@ ctx.stroke();
 ctx.closePath();*/
 
 var x = canvas.width / 2;
-
 var y = canvas.height - 30;
-
-var x2 = x - Math.floor(Math.random() * 200);
-var y2 = y - Math.floor(Math.random() * 200);
+var x2 = x - Math.floor(Math.random() * 500);
+var y2 = y - Math.floor(Math.random() * 500);
+var x3 = x - Math.floor(Math.random() * 500);
+var y3 = y - Math.floor(Math.random() * 500);
+var x4 = x - Math.floor(Math.random() * 500);
+var y4 = y - Math.floor(Math.random() * 500);
 
 var dx = 2;
 var dy = -2;
 var dx2 = 2;
 var dy2 = -2;
+var dx3 = 2;
+var dy3 = -2;
+var dx4 = 2;
+var dy4 = -2;
+
 var ballRadius = 5;
 var paddleHeight = 10;
 var paddleWidth = 75;
@@ -120,6 +127,22 @@ function drawBall2() {
 	ctx.closePath();
 }
 
+function drawBall3() {
+	ctx.beginPath();
+	ctx.arc(x3, y3, updateBallRadius(), 0, Math.PI * 2);
+	ctx.fillStyle = "#0095DD";
+	ctx.fill();
+	ctx.closePath();
+}
+
+function drawBall4() {
+	ctx.beginPath();
+	ctx.arc(x4, y4, updateBallRadius(), 0, Math.PI * 2);
+	ctx.fillStyle = "#0095DD";
+	ctx.fill();
+	ctx.closePath();
+}
+
 function drawPaddle() {
 	ctx.beginPath();
 	ctx.rect(paddleX, canvas.height - (paddleHeight), paddleWidth, paddleHeight);
@@ -144,6 +167,15 @@ function collisonDetection() {
 				}
 				if (x2 > b.x && x2 < b.x + brickWidth && y2 > b.y && y2 < b.y + brickHeight) {
 					dy2 = -dy2;
+					b.status = 0;
+					++score;
+					if (brickColumnCount * brickRowCount == score) {
+						alert("YOU WIN");
+						document.location.reload();
+					}
+				}
+				if (x3 > b.x && x3 < b.x + brickWidth && y3 > b.y && y3 < b.y + brickHeight) {
+					dy3 = -dy3;
 					b.status = 0;
 					++score;
 					if (brickColumnCount * brickRowCount == score) {
@@ -179,6 +211,8 @@ function draw() {
 	drawLives();
 	drawBall();
 	drawBall2();
+	drawBall3();
+	drawBall4();
 	drawPaddle();
 	drawScore();
 	collisonDetection();
@@ -226,12 +260,56 @@ function draw() {
 			}
 		}
 	}
+	else if (y3 + dy3 > canvas.height - 2 * updateBallRadius()) {
+		if (x3 > paddleX && x3 < paddleX + paddleWidth) {
+			dy3 = -dy3;
+		}
+		else {
+			lives = lives - 1;
+			if (!lives) {
+				alert("GAME OVER");
+				document.location.reload();
+			}
+			else {
+				x3 = canvas.width / 2;
+				y3 = canvas.height - 30;
+				dx3 = 2;
+				dy3 = -2;
+				paddleX = (canvas.width - paddleWidth) / 2;
+			}
+		}
+	}
+	else if (y4 + dy4 > canvas.height - 2 * updateBallRadius()) {
+		if (x4 > paddleX && x4 < paddleX + paddleWidth) {
+			dy4 = -dy4;
+		}
+		else {
+			lives = lives - 1;
+			if (!lives) {
+				alert("GAME OVER");
+				document.location.reload();
+			}
+			else {
+				x4 = canvas.width / 2;
+				y4 = canvas.height - 30;
+				dx4 = 2;
+				dy4 = -2;
+				paddleX = (canvas.width - paddleWidth) / 2;
+			}
+		}
+	}
 
 	if ((x + dx < updateBallRadius() || (x + dx > canvas.width - updateBallRadius()))) {
 		dx = -dx;
 	}
 	if ((x2 + dx2 < updateBallRadius() || (x2 + dx2 > canvas.width - updateBallRadius()))) {
 		dx2 = -dx2;
+	}
+	if ((x3 + dx3 < updateBallRadius() || (x3 + dx3 > canvas.width - updateBallRadius()))) {
+		dx3 = -dx3;
+	}
+	if ((x4 + dx4 < updateBallRadius() || (x4 + dx4 > canvas.width - updateBallRadius()))) {
+		dx4 = -dx4;
 	}
 	if (rightPressed && paddleX < canvas.width - paddleWidth) {
 		paddleX += 7;
@@ -243,6 +321,10 @@ function draw() {
 	y += dy;
 	x2 += dx2;
 	y2 += dy2;
+	x3 += dx3;
+	y3 += dy3;
+	x4 += dx4;
+	y4 += dy4;
 }
 
 
